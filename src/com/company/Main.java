@@ -5,18 +5,22 @@ public class Main {
     public static void main(String[] args) {
 
     	Central central=new Central();
-    	//Ingresar por teclado clientes y productos. (1 pt)
-		Particular particular_1=new Particular("tobias","quetiimporta",438732742);
-		Particular particular_2=new Particular("ramon","quetiimporta",438732742);
-		Particular particular_3=new Particular("juan","quetiimporta",438732742);
-		Empresa empresa_1=new Empresa("Los chantas","quetiimporta",438732742);
-		Empresa empresa_2=new Empresa("Los genios","quetiimporta",438732742);
+    	//Ingresar por teclado clientes y productos.
+		//pongo un boleano en el constructor de cliente para saber si es empresa o no
+		//ya que no tiene sentido crear dos nuevas clases si no le vamos a agregar ningun nuevo atributo o metodo
 
-		central.particu.add(particular_1);
-		central.particu.add(particular_2);
-		central.particu.add(particular_3);
+		Cliente particular_1=new Cliente("tobias","x",438732742,false);
+		Cliente particular_2=new Cliente("juan","x",438732742,false);
+		Cliente particular_3=new Cliente("pamela","x",438732742,false);
+		Cliente empresa_1=new Cliente("los mejores","x",438732742,true);
+		Cliente empresa_2=new Cliente("los gauchos","x",438732742,true);
+
+		central.todosLosClientes.add(particular_1);
+		central.todosLosClientes.add(particular_2);
+		central.todosLosClientes.add(particular_3);
 		central.todosLosClientes.add(empresa_1);
 		central.todosLosClientes.add(empresa_2);
+
 		Producto producto_1=new Producto("jabon",2,23.5);
 		central.productosEnStock.add(producto_1);
 		Producto producto_2=new Producto("carne",22,24);
@@ -31,13 +35,14 @@ public class Main {
 
 		//Realice un nuevo pedido por teclado junto con sus validaciones
 		central.pedirUnProducto(particular_1,producto_1,20);
+
 		central.pedirUnProducto(particular_1,producto_1,20);
 		central.pedirUnProducto(particular_1,producto_1,20);
 
 		central.pedirUnProducto(particular_2,producto_2,20);
 		central.pedirUnProducto(particular_2,producto_2,20);
 		central.pedirUnProducto(particular_2,producto_2,20);
-		central.pedirUnProducto(particular_2,producto_2,20);
+
 
 		central.pedirUnProducto(particular_3,producto_4,20);
 
@@ -55,15 +60,7 @@ public class Main {
 		central.calcularPromedioVentas();
 		System.out.println("cliente al que hay q decirle 'men sos un adicto a comprar en nuestra pagina'");
 		//cliente que compro mas
-		Object c =central.clienteQueMasCompra();
-		if(c instanceof Particular)
-		{
-			Particular particular=(Particular)c;
-			System.out.println(particular.toString());
-		}else
-		{
-			Empresa empresa=(Empresa)c;
-			System.out.println(empresa.toString());
-		}
+        Cliente c =central.clienteQueMasCompra();
+		System.out.println(c.toString());
     }
 }

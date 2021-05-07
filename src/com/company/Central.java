@@ -1,17 +1,14 @@
 package com.company;
 
-import javafx.scene.transform.Scale;
-
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Scanner;
 
 public class Central {
     public ArrayList<Producto> productosEnStock=new ArrayList<>();
-    public ArrayList<Double> historialDeVentas=new ArrayList<>(5);
+    public ArrayList<Venta> historialDeVentas=new ArrayList<>(5);
     public ArrayList<Cliente> todosLosClientes=new ArrayList<>();
-    public ArrayList<Particular> particu=new ArrayList<>();
+
     public Central()
     {
 
@@ -36,13 +33,13 @@ public class Central {
     }
 
 
-    public Object clienteQueMasCompra()
+    public Cliente clienteQueMasCompra()
     {
-        Object mayor=this.todosLosClientes.get(0);
+        Cliente mayor=this.todosLosClientes.get(0);
         mayor.toString();
 
 
-        for (Object i:this.todosLosClientes) {
+        for (Cliente i:this.todosLosClientes) {
                 //si el cliente i es esta mas veces q el primer cliente de la lista
                 if(Collections.frequency(this.todosLosClientes,i)>Collections.frequency(this.todosLosClientes,mayor))
                 {
@@ -53,7 +50,7 @@ public class Central {
         return mayor;
     }
 
-    public void pedirUnProducto(Object particularOempresa,Producto producto,int kms)
+    public void pedirUnProducto(Cliente particularOempresa,Producto producto,double kms)
     {
 
         double costoEnvio=kms*20;
@@ -61,7 +58,7 @@ public class Central {
         int i=1;
         //Si una empresa realiza un
         //pedido, se le aplica un descuento del 15% en el costo del envío.
-        if(particularOempresa instanceof Empresa)
+        if(particularOempresa.isEmpresa())
         {
             costoEnvio=costoEnvio-(costoEnvio*0.15);
         }
@@ -72,14 +69,18 @@ public class Central {
             System.out.println("Hay stock del producto seleccionado "+producto.nombre);
 
             costoTotal=costoEnvio+producto.getPrecio();
+            System.out.println("\n****************\n");
+            System.out.println("COSTO TOTAL DEL ENVIO->"+costoTotal);
+            System.out.println("\n****************\n");
 
             System.out.println("Desea confirmar? si/no");
             String x=confirmar.nextLine();
             System.out.println(x);
+
             if(x.equals("si"))
             {
                 System.out.println("venta realizada correctamente");
-                this.historialDeVentas.add(costoTotal);
+                this.historialDeVentas.add(new Venta(particularOempresa,producto,20,costoTotal));
                 this.todosLosClientes.add((Cliente) particularOempresa);
                 int indice=productosEnStock.indexOf(producto);
                 productosEnStock.get(indice).setStock(productosEnStock.get(indice).getStock()-1);
@@ -102,9 +103,12 @@ public class Central {
     public void calcularPromedioVentas()
     {
         double total=0;
-        for (double i: this.historialDeVentas) {
-            total=total+i;
+        int j=0;
+
+        for (Venta i: this.historialDeVentas) {
+            total=total+i.getCostoTotal();
         }
+
         System.out.println("El promedio de ventas es:"+Math.round(total/this.historialDeVentas.size()));
     }
 }
